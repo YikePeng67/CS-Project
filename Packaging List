@@ -1,14 +1,11 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TravelReady - Your Smart Packing Assistant</title>
+    <title>TravelReady - Smart Packing Assistant</title>
     <style>
-        /* ========================================
-           GRUNDLEGENDES STYLING
-           Das ist wie die "Basis-Farbe" für alles
-        ======================================== */
+        
         * {
             margin: 0;
             padding: 0;
@@ -16,34 +13,27 @@
         }
 
         body {
-            font-family: 'Nunito', 'Segoe UI', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #ff9a56;
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
             color: #333;
+            padding: 20px;
         }
 
-        /* ========================================
-           CONTAINER - Die "Box" die alles enthält
-        ======================================== */
         .app-container {
             background: white;
-            width: 90%;
-            max-width: 800px;
+            width: 100%;
+            max-width: 900px;
             min-height: 600px;
             border-radius: 30px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
             overflow: hidden;
-            position: relative;
         }
 
-        /* ========================================
-           HEADER - Der obere Teil mit Logo
-        ======================================== */
         .header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #ff9a56 0%, #ff6ec7 50%, #9b59b6 100%);
             padding: 2rem;
             text-align: center;
             color: white;
@@ -59,15 +49,14 @@
             opacity: 0.9;
         }
 
-        /* ========================================
-           PROGRESS BAR - Zeigt wo man gerade ist
-        ======================================== */
         .progress-container {
             background: #f0f0f0;
             padding: 1.5rem 2rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
         }
 
         .progress-step {
@@ -76,11 +65,10 @@
             gap: 0.5rem;
             font-size: 0.9rem;
             color: #999;
-            transition: all 0.3s ease;
         }
 
         .progress-step.active {
-            color: #667eea;
+            color: #ff9a56;
             font-weight: bold;
         }
 
@@ -97,13 +85,11 @@
             align-items: center;
             justify-content: center;
             font-weight: bold;
-            transition: all 0.3s ease;
         }
 
         .progress-step.active .step-circle {
-            background: #667eea;
+            background: #ff9a56;
             color: white;
-            transform: scale(1.1);
         }
 
         .progress-step.completed .step-circle {
@@ -111,33 +97,20 @@
             color: white;
         }
 
-        /* ========================================
-           SEITEN - Jede "Page" ist eine Ansicht
-        ======================================== */
         .page {
             display: none;
             padding: 3rem 2rem;
-            animation: fadeIn 0.5s ease;
+            max-height: 70vh;
+            overflow-y: auto;
         }
 
         .page.active {
             display: block;
         }
 
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
         .page-title {
             font-size: 2rem;
-            color: #667eea;
+            color: #ff9a56;
             margin-bottom: 0.5rem;
         }
 
@@ -146,9 +119,6 @@
             margin-bottom: 2rem;
         }
 
-        /* ========================================
-           FORM ELEMENTE - Eingabefelder & Buttons
-        ======================================== */
         .form-group {
             margin-bottom: 1.5rem;
         }
@@ -168,7 +138,6 @@
             border: 2px solid #e0e0e0;
             border-radius: 12px;
             font-size: 1rem;
-            transition: all 0.3s ease;
             font-family: inherit;
         }
 
@@ -176,13 +145,46 @@
         .form-group select:focus,
         .form-group textarea:focus {
             outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            border-color: #ff9a56;
+            box-shadow: 0 0 0 3px rgba(255, 154, 86, 0.2);
         }
 
-        /* ========================================
-           CHECKBOX GRID - Für mehrere Optionen
-        ======================================== */
+        .style-profiles {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .style-card {
+            padding: 1.5rem;
+            border: 3px solid #e0e0e0;
+            border-radius: 15px;
+            cursor: pointer;
+            background: #f8f9fa;
+        }
+
+        .style-card:hover {
+            border-color: #ff9a56;
+        }
+
+        .style-card.selected {
+            border-color: #ff9a56;
+            background: #ffe8db;
+        }
+
+        .style-card h4 {
+            color: #ff9a56;
+            margin-bottom: 0.5rem;
+            font-size: 1.2rem;
+        }
+
+        .style-card p {
+            color: #666;
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+
         .checkbox-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
@@ -198,12 +200,10 @@
             background: #f8f9fa;
             border-radius: 10px;
             cursor: pointer;
-            transition: all 0.3s ease;
         }
 
         .checkbox-item:hover {
             background: #e9ecef;
-            transform: translateY(-2px);
         }
 
         .checkbox-item input[type="checkbox"] {
@@ -212,9 +212,6 @@
             cursor: pointer;
         }
 
-        /* ========================================
-           BUTTONS - Vor/Zurück Navigation
-        ======================================== */
         .button-container {
             display: flex;
             gap: 1rem;
@@ -229,17 +226,15 @@
             font-size: 1.1rem;
             font-weight: bold;
             cursor: pointer;
-            transition: all 0.3s ease;
         }
 
         .btn-primary {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #ff9a56 0%, #ff6ec7 50%, #9b59b6 100%);
             color: white;
         }
 
         .btn-primary:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.4);
+            opacity: 0.9;
         }
 
         .btn-secondary {
@@ -251,14 +246,6 @@
             background: #d0d0d0;
         }
 
-        .btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-
-        /* ========================================
-           CHIPS - Für erkannte Aktivitäten
-        ======================================== */
         .chips-container {
             display: flex;
             flex-wrap: wrap;
@@ -268,34 +255,21 @@
 
         .chip {
             padding: 0.5rem 1rem;
-            background: #667eea;
+            background: #ff9a56;
             color: white;
             border-radius: 20px;
             font-size: 0.9rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
         }
 
-        .chip-remove {
-            cursor: pointer;
-            font-weight: bold;
-        }
-
-        /* ========================================
-           PACKING LIST - Die finale Checkliste
-        ======================================== */
         .packing-category {
             margin-bottom: 2rem;
         }
 
         .category-title {
             font-size: 1.3rem;
-            color: #667eea;
+            color: #ff9a56;
             margin-bottom: 1rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
+            font-weight: bold;
         }
 
         .packing-item {
@@ -305,7 +279,6 @@
             background: #f8f9fa;
             border-radius: 10px;
             margin-bottom: 0.5rem;
-            transition: all 0.3s ease;
         }
 
         .packing-item:hover {
@@ -324,29 +297,22 @@
             text-decoration: line-through;
         }
 
-        /* ========================================
-           RESPONSIVE - Für Handy & Tablet
-        ======================================== */
-        @media (max-width: 768px) {
-            .app-container {
-                width: 95%;
-                border-radius: 20px;
-            }
+        .item-quantity {
+            margin-left: auto;
+            font-weight: bold;
+            color: #ff9a56;
+        }
 
+        @media (max-width: 768px) {
             .header h1 {
                 font-size: 1.8rem;
-            }
-
-            .progress-container {
-                flex-wrap: wrap;
-                gap: 1rem;
             }
 
             .page {
                 padding: 2rem 1.5rem;
             }
 
-            .checkbox-grid {
+            .style-profiles {
                 grid-template-columns: 1fr;
             }
         }
@@ -354,17 +320,13 @@
 </head>
 <body>
     <div class="app-container">
-        <!-- ========================================
-             HEADER - Zeigt den Titel der App
-        ======================================== -->
+        <!-- HEADER -->
         <div class="header">
             <h1>✈️ TravelReady</h1>
             <p>Your Smart Packing Assistant</p>
         </div>
 
-        <!-- ========================================
-             PROGRESS BAR - Zeigt Fortschritt
-        ======================================== -->
+        <!-- PROGRESS BAR -->
         <div class="progress-container">
             <div class="progress-step active" data-step="1">
                 <div class="step-circle">1</div>
@@ -384,20 +346,17 @@
             </div>
         </div>
 
-        <!-- ========================================
-             PAGE 1 - PERSÖNLICHE INFORMATIONEN
-        ======================================== -->
+        <!-- PAGE 1 - PROFILE -->
         <div class="page active" id="page1">
             <h2 class="page-title">👤 Tell us about yourself</h2>
             <p class="page-subtitle">This helps us personalize your packing list</p>
 
             <div class="form-group">
-                <label>Gender (optional)</label>
-                <select id="gender">
-                    <option value="">Prefer not to say</option>
-                    <option value="male">Male</option>
-                    <option value="female">Female</option>
-                    <option value="other">Other</option>
+                <label>Gender</label>
+                <select id="gender" required>
+                    <option value="">Select gender</option>
+                    <option value="woman">Woman</option>
+                    <option value="man">Man</option>
                 </select>
             </div>
 
@@ -414,38 +373,26 @@
             </div>
 
             <div class="form-group">
-                <label>Medical needs (optional)</label>
-                <input type="text" id="medical" placeholder="e.g., lactose-free, ADHD medication, insulin">
+                <label>Style Profile</label>
+                <div class="style-profiles">
+                    <div class="style-card selected" onclick="selectStyle('casual')">
+                        <h4>👕 Casual</h4>
+                        <p>I prefer simple, comfortable outfits that fit every situation.</p>
+                    </div>
+                    <div class="style-card" onclick="selectStyle('business')">
+                        <h4>💼 Business</h4>
+                        <p>I like a polished look with blazers, shirts, and tailored pants.</p>
+                    </div>
+                    <div class="style-card" onclick="selectStyle('feminine')">
+                        <h4>💃 Feminine</h4>
+                        <p>I like to wear dresses and skirts for a softer, elegant travel style.</p>
+                    </div>
+                </div>
             </div>
 
             <div class="form-group">
-                <label>Electronics you'll bring</label>
-                <div class="checkbox-grid">
-                    <div class="checkbox-item">
-                        <input type="checkbox" id="phone" value="phone" checked disabled>
-                        <label for="phone">📱 Phone (always)</label>
-                    </div>
-                    <div class="checkbox-item">
-                        <input type="checkbox" id="laptop" value="laptop">
-                        <label for="laptop">💻 Laptop</label>
-                    </div>
-                    <div class="checkbox-item">
-                        <input type="checkbox" id="tablet" value="tablet">
-                        <label for="tablet">📱 Tablet</label>
-                    </div>
-                    <div class="checkbox-item">
-                        <input type="checkbox" id="camera" value="camera">
-                        <label for="camera">📷 Camera</label>
-                    </div>
-                    <div class="checkbox-item">
-                        <input type="checkbox" id="headphones" value="headphones">
-                        <label for="headphones">🎧 Headphones</label>
-                    </div>
-                    <div class="checkbox-item">
-                        <input type="checkbox" id="smartwatch" value="smartwatch">
-                        <label for="smartwatch">⌚ Smartwatch</label>
-                    </div>
-                </div>
+                <label>Medical needs (optional)</label>
+                <input type="text" id="medical" placeholder="e.g., lactose-free medication, insulin, ADHD medication">
             </div>
 
             <div class="button-container">
@@ -453,9 +400,7 @@
             </div>
         </div>
 
-        <!-- ========================================
-             PAGE 2 - REISEDETAILS
-        ======================================== -->
+        <!-- PAGE 2 - TRIP DETAILS -->
         <div class="page" id="page2">
             <h2 class="page-title">🌍 Where are you going?</h2>
             <p class="page-subtitle">We'll check the weather for you</p>
@@ -464,26 +409,36 @@
                 <label>Destination</label>
                 <select id="destination" required>
                     <option value="">Choose your destination</option>
+                    <option value="Amsterdam">🇳🇱 Amsterdam</option>
                     <option value="Bangkok">🇹🇭 Bangkok</option>
-                    <option value="Tokyo">🇯🇵 Tokyo</option>
-                    <option value="Bali">🇮🇩 Bali</option>
-                    <option value="Paris">🇫🇷 Paris</option>
-                    <option value="Lisbon">🇵🇹 Lisbon</option>
                     <option value="Barcelona">🇪🇸 Barcelona</option>
+                    <option value="Berlin">🇩🇪 Berlin</option>
                     <option value="Dubai">🇦🇪 Dubai</option>
-                    <option value="New York">🇺🇸 New York</option>
-                    <option value="London">🇬🇧 London</option>
-                    <option value="Rome">🇮🇹 Rome</option>
+                    <option value="Dublin">🇮🇪 Dublin</option>
+                    <option value="Florence">🇮🇹 Florence</option>
+                    <option value="Hong Kong">🇭🇰 Hong Kong</option>
                     <option value="Istanbul">🇹🇷 Istanbul</option>
+                    <option value="Kyoto">🇯🇵 Kyoto</option>
+                    <option value="Las Vegas">🇺🇸 Las Vegas</option>
+                    <option value="Lisbon">🇵🇹 Lisbon</option>
+                    <option value="London">🇬🇧 London</option>
+                    <option value="Los Angeles">🇺🇸 Los Angeles</option>
+                    <option value="Madrid">🇪🇸 Madrid</option>
+                    <option value="Melbourne">🇦🇺 Melbourne</option>
+                    <option value="Milan">🇮🇹 Milan</option>
+                    <option value="Munich">🇩🇪 Munich</option>
+                    <option value="New York">🇺🇸 New York</option>
+                    <option value="Osaka">🇯🇵 Osaka</option>
+                    <option value="Paris">🇫🇷 Paris</option>
+                    <option value="Prague">🇨🇿 Prague</option>
+                    <option value="Rome">🇮🇹 Rome</option>
+                    <option value="Seoul">🇰🇷 Seoul</option>
                     <option value="Singapore">🇸🇬 Singapore</option>
                     <option value="Sydney">🇦🇺 Sydney</option>
-                    <option value="Amsterdam">🇳🇱 Amsterdam</option>
-                    <option value="Prague">🇨🇿 Prague</option>
+                    <option value="Taipei">🇹🇼 Taipei</option>
+                    <option value="Tokyo">🇯🇵 Tokyo</option>
                     <option value="Vienna">🇦🇹 Vienna</option>
-                    <option value="Berlin">🇩🇪 Berlin</option>
-                    <option value="Copenhagen">🇩🇰 Copenhagen</option>
-                    <option value="Stockholm">🇸🇪 Stockholm</option>
-                    <option value="Reykjavik">🇮🇸 Reykjavik</option>
+                    <option value="Zürich">🇨🇭 Zürich</option>
                 </select>
             </div>
 
@@ -497,31 +452,24 @@
                 <input type="date" id="endDate" required>
             </div>
 
-            <div id="weatherInfo" style="display: none; padding: 1rem; background: #e3f2fd; border-radius: 10px; margin-top: 1rem;">
-                <strong>Weather info:</strong>
-                <p id="weatherText"></p>
-            </div>
-
             <div class="button-container">
                 <button class="btn btn-secondary" onclick="prevPage()">← Back</button>
                 <button class="btn btn-primary" onclick="nextPage()">Next: Activities →</button>
             </div>
         </div>
 
-        <!-- ========================================
-             PAGE 3 - AKTIVITÄTEN (KI)
-        ======================================== -->
+        <!-- PAGE 3 - ACTIVITIES -->
         <div class="page" id="page3">
             <h2 class="page-title">🎯 What will you do there?</h2>
-            <p class="page-subtitle">Describe your plans, and our AI will help</p>
+            <p class="page-subtitle">Describe your plans, and we'll help you pack</p>
 
             <div class="form-group">
                 <label>Type your activities</label>
-                <textarea id="activities" rows="5" placeholder="e.g., I'll go to a rooftop dinner, then to the beach, and visit a temple..."></textarea>
+                <textarea id="activities" rows="5" placeholder="e.g., I'll go to the beach, visit temples, and have a rooftop dinner..."></textarea>
             </div>
 
             <button class="btn btn-primary" onclick="analyzeActivities()" style="width: 100%; margin-bottom: 1rem;">
-                🤖 Analyze with AI
+                🤖 Analyze Activities
             </button>
 
             <div id="detectedActivities" style="display: none;">
@@ -536,19 +484,22 @@
 
             <div class="button-container">
                 <button class="btn btn-secondary" onclick="prevPage()">← Back</button>
-                <button class="btn btn-primary" onclick="nextPage()">Next: Packing List →</button>
+                <button class="btn btn-primary" onclick="nextPage()">Generate Packing List →</button>
             </div>
         </div>
 
-        <!-- ========================================
-             PAGE 4 - PACKLISTE
-        ======================================== -->
+        <!-- PAGE 4 - PACKING LIST -->
         <div class="page" id="page4">
             <h2 class="page-title">🎒 Your Personalized Packing List</h2>
             <p class="page-subtitle">Check off items as you pack them</p>
 
+            <div id="weatherInfo" style="display: none; padding: 1rem; background: #e3f2fd; border-radius: 10px; margin-bottom: 2rem;">
+                <strong>🌤️ Weather forecast:</strong>
+                <p id="weatherText"></p>
+            </div>
+
             <div id="packingList">
-                <!-- Wird mit JavaScript gefüllt -->
+                <!-- Generated by JavaScript -->
             </div>
 
             <div class="form-group" style="margin-top: 2rem;">
@@ -566,63 +517,115 @@
         </div>
     </div>
 
-    <!-- ========================================
-         JAVASCRIPT - Die "Intelligenz" der App
-    ======================================== -->
     <script>
-        // GLOBALE VARIABLEN - Speichert alle Daten
         let currentPage = 1;
-        let userData = {};
+        let userData = {
+            styleProfile: 'casual'
+        };
         let tripData = {};
         let activitiesData = [];
         let packingListData = [];
 
-        // ========================================
-        // NAVIGATION - Zwischen Seiten wechseln
-        // ========================================
+        const pastTrips = [
+            { destination: 'Bangkok', temp: 30, age: 25, activities: ['Beach', 'Temple', 'Night Out', 'Street Food'] },
+            { destination: 'Bangkok', temp: 32, age: 28, activities: ['Beach', 'Temple', 'Shopping', 'Spa'] },
+            { destination: 'Bangkok', temp: 31, age: 22, activities: ['Beach', 'Night Out', 'Shopping'] },
+            { destination: 'Bangkok', temp: 29, age: 30, activities: ['Temple', 'Street Food', 'Night Out'] },
+            { destination: 'Bangkok', temp: 33, age: 35, activities: ['Temple', 'Hiking', 'Street Food'] },
+            { destination: 'Paris', temp: 15, age: 26, activities: ['Museum', 'Shopping', 'Fine Dining'] },
+            { destination: 'Paris', temp: 14, age: 24, activities: ['Museum', 'Shopping', 'Cafe'] },
+            { destination: 'Paris', temp: 16, age: 28, activities: ['Shopping', 'Fine Dining', 'Museum'] },
+            { destination: 'Paris', temp: 13, age: 32, activities: ['Museum', 'Fine Dining', 'City Sightseeing'] },
+            { destination: 'Paris', temp: 15, age: 29, activities: ['Museum', 'City Sightseeing'] },
+            { destination: 'Tokyo', temp: 18, age: 27, activities: ['Shopping', 'Fine Dining', 'City Sightseeing'] },
+            { destination: 'Tokyo', temp: 20, age: 25, activities: ['Shopping', 'Temple', 'Fine Dining'] },
+            { destination: 'Tokyo', temp: 17, age: 30, activities: ['City Sightseeing', 'Fine Dining', 'Museum'] },
+            { destination: 'Tokyo', temp: 19, age: 33, activities: ['Temple', 'City Sightseeing', 'Hiking'] },
+            { destination: 'Dubai', temp: 38, age: 28, activities: ['Shopping', 'Beach', 'Fine Dining'] },
+            { destination: 'Dubai', temp: 40, age: 26, activities: ['Beach', 'Shopping', 'Spa'] },
+            { destination: 'Dubai', temp: 37, age: 32, activities: ['Beach', 'Fine Dining', 'City Sightseeing'] },
+            { destination: 'Dubai', temp: 39, age: 35, activities: ['City Sightseeing', 'Beach'] },
+            { destination: 'New York', temp: 12, age: 24, activities: ['Shopping', 'Museum', 'Fine Dining'] },
+            { destination: 'New York', temp: 14, age: 27, activities: ['Shopping', 'City Sightseeing', 'Museum'] },
+            { destination: 'New York', temp: 11, age: 30, activities: ['Museum', 'City Sightseeing', 'Fine Dining'] },
+            { destination: 'New York', temp: 13, age: 33, activities: ['City Sightseeing', 'Museum', 'Night Out'] },
+            { destination: 'Barcelona', temp: 24, age: 25, activities: ['Beach', 'Shopping', 'Fine Dining'] },
+            { destination: 'Barcelona', temp: 26, age: 28, activities: ['Beach', 'City Sightseeing', 'Shopping'] },
+            { destination: 'Barcelona', temp: 23, age: 31, activities: ['Beach', 'City Sightseeing', 'Fine Dining'] },
+            { destination: 'Barcelona', temp: 25, age: 29, activities: ['City Sightseeing', 'Beach', 'Museum'] },
+            { destination: 'London', temp: 10, age: 26, activities: ['Museum', 'Shopping', 'Fine Dining'] },
+            { destination: 'London', temp: 11, age: 24, activities: ['Shopping', 'Museum', 'City Sightseeing'] },
+            { destination: 'London', temp: 9, age: 32, activities: ['Museum', 'City Sightseeing', 'Fine Dining'] },
+            { destination: 'London', temp: 12, age: 30, activities: ['Museum', 'City Sightseeing', 'Night Out'] },
+            { destination: 'Rome', temp: 20, age: 27, activities: ['Museum', 'City Sightseeing', 'Fine Dining'] },
+            { destination: 'Rome', temp: 21, age: 25, activities: ['City Sightseeing', 'Shopping', 'Museum'] },
+            { destination: 'Rome', temp: 19, age: 33, activities: ['Museum', 'City Sightseeing', 'Fine Dining'] },
+            { destination: 'Rome', temp: 22, age: 31, activities: ['City Sightseeing', 'Museum', 'Hiking'] },
+            { destination: 'Sydney', temp: 25, age: 26, activities: ['Beach', 'City Sightseeing', 'Shopping'] },
+            { destination: 'Sydney', temp: 27, age: 28, activities: ['Beach', 'Shopping', 'Fine Dining'] },
+            { destination: 'Sydney', temp: 24, age: 30, activities: ['Beach', 'Surfing', 'Hiking'] },
+            { destination: 'Sydney', temp: 26, age: 32, activities: ['Beach', 'City Sightseeing', 'Hiking'] },
+            { destination: 'Singapore', temp: 29, age: 25, activities: ['Shopping', 'Fine Dining', 'City Sightseeing'] },
+            { destination: 'Singapore', temp: 28, age: 27, activities: ['Shopping', 'City Sightseeing', 'Museum'] },
+            { destination: 'Singapore', temp: 30, age: 31, activities: ['City Sightseeing', 'Fine Dining', 'Museum'] },
+            { destination: 'Singapore', temp: 29, age: 33, activities: ['City Sightseeing', 'Fine Dining'] },
+            { destination: 'Amsterdam', temp: 8, age: 24, activities: ['Museum', 'City Sightseeing', 'Shopping'] },
+            { destination: 'Amsterdam', temp: 10, age: 26, activities: ['City Sightseeing', 'Museum', 'Shopping'] },
+            { destination: 'Amsterdam', temp: 7, age: 30, activities: ['Museum', 'City Sightseeing', 'Night Out'] },
+            { destination: 'Amsterdam', temp: 9, age: 32, activities: ['City Sightseeing', 'Museum', 'Cycling'] },
+            { destination: 'Berlin', temp: 2, age: 25, activities: ['Museum', 'Shopping', 'Night Out'] },
+            { destination: 'Berlin', temp: 3, age: 27, activities: ['Museum', 'City Sightseeing', 'Shopping'] },
+            { destination: 'Berlin', temp: 1, age: 29, activities: ['Museum', 'City Sightseeing', 'Night Out'] },
+            { destination: 'Berlin', temp: 4, age: 31, activities: ['City Sightseeing', 'Museum', 'Fine Dining'] }
+        ];
+
+        function selectStyle(style) {
+            document.querySelectorAll('.style-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            
+            event.currentTarget.classList.add('selected');
+            
+            userData.styleProfile = style;
+        }
+
         function nextPage() {
             if (currentPage === 1) {
-                // Daten von Seite 1 speichern
-                userData = {
-                    gender: document.getElementById('gender').value,
-                    age: document.getElementById('age').value,
-                    medical: document.getElementById('medical').value,
-                    electronics: getSelectedElectronics()
-                };
+                userData.gender = document.getElementById('gender').value;
+                userData.age = document.getElementById('age').value;
+                userData.medical = document.getElementById('medical').value;
                 
-                if (!userData.age) {
-                    alert('Please select your age group');
+                if (!userData.gender || !userData.age) {
+                    alert('Please select your gender and age group');
                     return;
                 }
             }
             
             if (currentPage === 2) {
-                // Daten von Seite 2 speichern
-                tripData = {
-                    destination: document.getElementById('destination').value,
-                    startDate: document.getElementById('startDate').value,
-                    endDate: document.getElementById('endDate').value
-                };
+                tripData.destination = document.getElementById('destination').value;
+                tripData.startDate = document.getElementById('startDate').value;
+                tripData.endDate = document.getElementById('endDate').value;
                 
                 if (!tripData.destination || !tripData.startDate || !tripData.endDate) {
                     alert('Please fill in all trip details');
                     return;
                 }
                 
-                // Wetter abrufen
+                const start = new Date(tripData.startDate);
+                const end = new Date(tripData.endDate);
+                const diffTime = Math.abs(end - start);
+                tripData.travelDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
+                
                 fetchWeather();
                 
-                // Beliebte Aktivitäten anzeigen
                 document.getElementById('popularDestination').textContent = tripData.destination;
                 showPopularActivities(tripData.destination);
             }
             
             if (currentPage === 3) {
-                // Packliste generieren
                 generatePackingList();
             }
             
-            // Zur nächsten Seite
             if (currentPage < 4) {
                 document.getElementById('page' + currentPage).classList.remove('active');
                 currentPage++;
@@ -655,9 +658,6 @@
             });
         }
 
-        // ========================================
-        // HILFSFUNKTIONEN
-        // ========================================
         function getSelectedElectronics() {
             const electronics = [];
             document.querySelectorAll('.checkbox-item input[type="checkbox"]:checked').forEach(checkbox => {
@@ -666,93 +666,275 @@
             return electronics;
         }
 
-        // ========================================
-        // WETTER API (Vereinfacht für Demo)
-        // ========================================
-        function fetchWeather() {
+        async function fetchWeather() {
             const destination = tripData.destination;
             const weatherInfo = document.getElementById('weatherInfo');
             const weatherText = document.getElementById('weatherText');
             
-            // Für Demo: Statische Wetterdaten
-            const weatherData = {
-                'Bangkok': '🌡️ 30°C, humid, afternoon rain likely',
-                'Tokyo': '🌸 18°C, mild and pleasant',
-                'Bali': '☀️ 28°C, tropical and sunny',
-                'Paris': '🌦️ 15°C, mild with occasional rain',
-                'Lisbon': '☀️ 22°C, warm and sunny',
-                'Barcelona': '☀️ 24°C, warm Mediterranean climate',
-                'Dubai': '🔥 35°C, hot and dry',
-                'New York': '🍂 12°C, cool autumn weather',
-                'London': '🌧️ 10°C, rainy and cool',
-                'Rome': '☀️ 20°C, pleasant Mediterranean',
-                'Istanbul': '🌤️ 16°C, mild and partly cloudy',
-                'Singapore': '🌴 29°C, hot and humid year-round',
-                'Sydney': '☀️ 25°C, warm and sunny',
-                'Amsterdam': '🌧️ 8°C, cool and rainy',
-                'Prague': '❄️ 5°C, cold and crisp',
-                'Vienna': '🌨️ 3°C, cold with possible snow',
-                'Berlin': '🌨️ 2°C, cold winter weather',
-                'Copenhagen': '❄️ 1°C, very cold',
-                'Stockholm': '❄️ -2°C, freezing and snowy',
-                'Reykjavik': '❄️ 0°C, cold with strong winds'
+            const cityCoordinates = {
+                'Paris': { lat: 48.8566, lon: 2.3522 },
+                'Madrid': { lat: 40.4168, lon: -3.7038 },
+                'Tokyo': { lat: 35.6762, lon: 139.6503 },
+                'Rome': { lat: 41.9028, lon: 12.4964 },
+                'Milan': { lat: 45.4642, lon: 9.1900 },
+                'New York': { lat: 40.7128, lon: -74.0060 },
+                'Amsterdam': { lat: 52.3676, lon: 4.9041 },
+                'Sydney': { lat: -33.8688, lon: 151.2093 },
+                'Singapore': { lat: 1.3521, lon: 103.8198 },
+                'Barcelona': { lat: 41.3851, lon: 2.1734 },
+                'Taipei': { lat: 25.0330, lon: 121.5654 },
+                'Seoul': { lat: 37.5665, lon: 126.9780 },
+                'London': { lat: 51.5074, lon: -0.1278 },
+                'Dubai': { lat: 25.2048, lon: 55.2708 },
+                'Berlin': { lat: 52.5200, lon: 13.4050 },
+                'Osaka': { lat: 34.6937, lon: 135.5023 },
+                'Bangkok': { lat: 13.7563, lon: 100.5018 },
+                'Los Angeles': { lat: 34.0522, lon: -118.2437 },
+                'Istanbul': { lat: 41.0082, lon: 28.9784 },
+                'Melbourne': { lat: -37.8136, lon: 144.9631 },
+                'Hong Kong': { lat: 22.3193, lon: 114.1694 },
+                'Munich': { lat: 48.1351, lon: 11.5820 },
+                'Las Vegas': { lat: 36.1699, lon: -115.1398 },
+                'Florence': { lat: 43.7696, lon: 11.2558 },
+                'Prague': { lat: 50.0755, lon: 14.4378 },
+                'Dublin': { lat: 53.3498, lon: -6.2603 },
+                'Kyoto': { lat: 35.0116, lon: 135.7681 },
+                'Vienna': { lat: 48.2082, lon: 16.3738 },
+                'Lisbon': { lat: 38.7223, lon: -9.1393 },
+                'Zurich': { lat: 47.3769, lon: 8.5417 }
             };
             
-            weatherText.textContent = weatherData[destination] || '☁️ Weather data not available';
+            const coords = cityCoordinates[destination];
+            if (!coords) {
+                weatherText.textContent = '⚠️ Weather data not available';
+                weatherInfo.style.display = 'block';
+                return;
+            }
+            
+            const today = new Date();
+            const startDate = new Date(tripData.startDate);
+            const daysUntilTrip = Math.ceil((startDate - today) / (1000 * 60 * 60 * 24));
+            
+            if (daysUntilTrip >= 0 && daysUntilTrip <= 16) {
+                await getForecastWeather(coords, startDate);
+            } else {
+                getHistoricalWeather(startDate);
+            }
+        }
+        
+        async function getForecastWeather(coords, startDate) {
+            const weatherText = document.getElementById('weatherText');
+            const weatherInfo = document.getElementById('weatherInfo');
+            
+            try {
+                const url = `https://api.open-meteo.com/v1/forecast?latitude=${coords.lat}&longitude=${coords.lon}&daily=temperature_2m_max,temperature_2m_min,precipitation_sum,windspeed_10m_max&timezone=auto`;
+                
+                const response = await fetch(url);
+                const data = await response.json();
+                
+                const dateStr = startDate.toISOString().split('T')[0];
+                const dateIndex = data.daily.time.indexOf(dateStr);
+                
+                if (dateIndex === -1) {
+                    getHistoricalWeather(startDate);
+                    return;
+                }
+                
+                const maxTemp = data.daily.temperature_2m_max[dateIndex];
+                const minTemp = data.daily.temperature_2m_min[dateIndex];
+                const rain = data.daily.precipitation_sum[dateIndex];
+                const wind = data.daily.windspeed_10m_max[dateIndex];
+                
+                const avgTemp = Math.round((maxTemp + minTemp) / 2);
+                
+                tripData.avgTemp = avgTemp;
+                tripData.isRainy = rain > 5;
+                tripData.isWindy = wind > 20;
+                
+                let desc = '';
+                if (avgTemp > 30) desc = 'hot';
+                else if (avgTemp > 20) desc = 'warm';
+                else if (avgTemp > 10) desc = 'mild';
+                else desc = 'cold';
+                
+                if (tripData.isRainy) desc += ', rainy';
+                if (tripData.isWindy) desc += ', windy';
+                
+                weatherText.textContent = `🌡️ ${avgTemp}°C (${Math.round(minTemp)}-${Math.round(maxTemp)}°C), ${desc}`;
+                weatherInfo.style.display = 'block';
+                
+            } catch (error) {
+                getHistoricalWeather(startDate);
+            }
+        }
+        
+        function getHistoricalWeather(startDate) {
+            const weatherText = document.getElementById('weatherText');
+            const weatherInfo = document.getElementById('weatherInfo');
+            
+            const month = startDate.getMonth();
+            
+            const monthlyAvg = {
+                'Paris': [6, 7, 10, 13, 17, 20, 22, 22, 19, 14, 9, 6],
+                'Madrid': [9, 11, 14, 16, 20, 25, 29, 28, 24, 18, 12, 9],
+                'Tokyo': [9, 10, 13, 18, 22, 25, 29, 30, 26, 21, 16, 11],
+                'Rome': [12, 13, 15, 17, 21, 25, 28, 28, 25, 20, 15, 12],
+                'Milan': [5, 8, 12, 16, 20, 24, 27, 27, 23, 17, 10, 6],
+                'New York': [3, 4, 9, 14, 20, 25, 28, 27, 23, 17, 11, 5],
+                'Amsterdam': [5, 6, 9, 12, 16, 19, 21, 21, 18, 13, 9, 6],
+                'Sydney': [26, 26, 25, 22, 19, 17, 16, 17, 19, 22, 24, 25],
+                'Singapore': [27, 28, 28, 29, 29, 28, 28, 28, 28, 28, 27, 27],
+                'Barcelona': [13, 14, 16, 17, 20, 24, 27, 27, 25, 21, 16, 13],
+                'Taipei': [18, 18, 21, 24, 27, 29, 31, 31, 29, 26, 23, 20],
+                'Seoul': [0, 3, 8, 14, 19, 23, 26, 27, 23, 16, 9, 2],
+                'London': [7, 8, 10, 13, 16, 19, 21, 21, 18, 14, 10, 7],
+                'Dubai': [24, 25, 28, 32, 37, 39, 40, 41, 38, 35, 30, 26],
+                'Berlin': [2, 3, 7, 13, 18, 21, 23, 23, 18, 13, 7, 3],
+                'Osaka': [9, 10, 13, 19, 23, 27, 31, 32, 28, 22, 16, 11],
+                'Bangkok': [32, 33, 34, 35, 34, 33, 33, 33, 32, 32, 31, 31],
+                'Los Angeles': [18, 19, 20, 21, 22, 24, 26, 27, 26, 24, 21, 18],
+                'Istanbul': [8, 9, 11, 16, 21, 25, 28, 28, 24, 19, 14, 10],
+                'Melbourne': [20, 20, 19, 16, 13, 11, 10, 11, 13, 15, 17, 19],
+                'Hong Kong': [18, 19, 22, 25, 28, 29, 29, 29, 28, 27, 23, 20],
+                'Munich': [2, 3, 8, 12, 17, 20, 22, 22, 18, 12, 6, 2],
+                'Las Vegas': [14, 17, 21, 26, 32, 38, 41, 40, 35, 27, 19, 13],
+                'Florence': [10, 12, 15, 18, 22, 26, 29, 29, 25, 20, 14, 10],
+                'Prague': [1, 2, 7, 12, 17, 20, 22, 22, 17, 12, 6, 2],
+                'Dublin': [8, 8, 10, 12, 14, 17, 19, 19, 17, 14, 10, 8],
+                'Kyoto': [8, 9, 13, 19, 23, 27, 31, 32, 28, 22, 16, 10],
+                'Vienna': [3, 5, 10, 15, 20, 23, 25, 25, 20, 14, 8, 4],
+                'Lisbon': [15, 16, 18, 19, 21, 24, 27, 27, 26, 22, 18, 15],
+                'Zurich': [2, 4, 9, 13, 17, 21, 23, 22, 18, 13, 7, 3]
+            };
+            
+            const temps = monthlyAvg[tripData.destination];
+            const avgTemp = temps ? temps[month] : 15;
+            
+            tripData.avgTemp = avgTemp;
+            tripData.isRainy = false;
+            tripData.isWindy = false;
+            
+            let desc = '';
+            if (avgTemp > 30) desc = 'typically hot';
+            else if (avgTemp > 20) desc = 'typically warm';
+            else if (avgTemp > 10) desc = 'typically mild';
+            else desc = 'typically cold';
+            
+            const months = ['January', 'February', 'March', 'April', 'May', 'June', 
+                           'July', 'August', 'September', 'October', 'November', 'December'];
+            
+            weatherText.textContent = `🌡️ ${avgTemp}°C average in ${months[month]}, ${desc}`;
             weatherInfo.style.display = 'block';
         }
 
-        // ========================================
-        // BELIEBTE AKTIVITÄTEN
-        // ========================================
         function showPopularActivities(destination) {
-            const popularActivitiesData = {
-                'Bangkok': ['Temple visits', 'Street food tours', 'Rooftop bars', 'Floating markets', 'Thai massage'],
-                'Tokyo': ['Sushi restaurants', 'Cherry blossom viewing', 'Shopping in Shibuya', 'Mount Fuji trip', 'Karaoke'],
-                'Bali': ['Beach days', 'Temple visits', 'Rice terrace tours', 'Surfing', 'Yoga retreats'],
-                'Paris': ['Eiffel Tower', 'Louvre Museum', 'Seine river cruise', 'Wine tasting', 'Cafe hopping'],
-                'Lisbon': ['Tram rides', 'Pastéis de nata tasting', 'Fado music', 'Beach trips', 'Historic neighborhoods']
+            const age = parseInt(userData.age.split('-')[0]);
+            const avgTemp = tripData.avgTemp || 20;
+            
+            const currentTrip = {
+                destination: destination,
+                temp: avgTemp,
+                age: age
             };
             
-            const activities = popularActivitiesData[destination] || ['City tours', 'Local cuisine', 'Museums', 'Shopping'];
-            document.getElementById('popularActivities').innerHTML = activities.map(a => `• ${a}`).join('<br>');
+            const k = 5;
+            const distances = [];
+            
+            for (let i = 0; i < pastTrips.length; i++) {
+                const trip = pastTrips[i];
+                const dist = calculateDistance(currentTrip, trip);
+                distances.push({ trip: trip, distance: dist });
+            }
+            
+            distances.sort((a, b) => a.distance - b.distance);
+            const nearestTrips = distances.slice(0, k);
+            
+            const activityCount = {};
+            let totalTrips = 0;
+            
+            for (let i = 0; i < nearestTrips.length; i++) {
+                const trip = nearestTrips[i].trip;
+                totalTrips++;
+                for (let j = 0; j < trip.activities.length; j++) {
+                    const activity = trip.activities[j];
+                    if (!activityCount[activity]) {
+                        activityCount[activity] = 0;
+                    }
+                    activityCount[activity]++;
+                }
+            }
+            
+            const recommendations = [];
+            for (let activity in activityCount) {
+                const percentage = Math.round((activityCount[activity] / totalTrips) * 100);
+                recommendations.push({ activity: activity, percentage: percentage });
+            }
+            
+            recommendations.sort((a, b) => b.percentage - a.percentage);
+            
+            let html = '';
+            for (let i = 0; i < recommendations.length; i++) {
+                html += `• ${recommendations[i].activity} (${recommendations[i].percentage}% of similar travelers)<br>`;
+            }
+            
+            document.getElementById('popularActivities').innerHTML = html;
+        }
+        
+        function calculateDistance(trip1, trip2) {
+            let dist = 0;
+            
+            if (trip1.destination !== trip2.destination) {
+                dist += 100;
+            }
+            
+            const tempDiff = Math.abs(trip1.temp - trip2.temp);
+            dist += tempDiff * 2;
+            
+            const ageDiff = Math.abs(trip1.age - trip2.age);
+            dist += ageDiff * 0.5;
+            
+            return dist;
         }
 
-        // ========================================
-        // KI AKTIVITÄTS-ERKENNUNG (Vereinfacht)
-        // ========================================
         function analyzeActivities() {
             const text = document.getElementById('activities').value.toLowerCase();
             
-            // Einfache Keyword-Erkennung (später: echte KI)
             const activityKeywords = {
                 'beach': '🏖️ Beach',
                 'swimming': '🏊 Swimming',
+                'swim': '🏊 Swimming',
                 'temple': '🛕 Temple visit',
                 'church': '⛪ Church visit',
+                'mosque': '🕌 Mosque visit',
                 'museum': '🏛️ Museum',
                 'hiking': '🥾 Hiking',
-                'restaurant': '🍽️ Dining',
-                'dinner': '🍽️ Dinner',
-                'rooftop': '🌆 Rooftop bar',
-                'bar': '🍹 Bar',
-                'club': '💃 Nightclub',
+                'hike': '🥾 Hiking',
+                'restaurant': '🍽️ Fine Dining',
+                'dinner': '🍽️ Fine Dining',
+                'rooftop': '🌆 Night Out',
+                'bar': '🍹 Night Out',
+                'club': '💃 Night Out',
                 'shopping': '🛍️ Shopping',
+                'shop': '🛍️ Shopping',
+                'meeting': '💼 Business Meeting',
+                'business': '💼 Business Meeting',
+                'conference': '💼 Business Meeting',
                 'skiing': '⛷️ Skiing',
-                'surfing': '🏄 Surfing',
-                'yoga': '🧘 Yoga',
+                'snowboard': '🏂 Snowboarding',
+                'city': '🏙️ City Sightseeing',
+                'sightseeing': '🏙️ City Sightseeing',
                 'spa': '💆 Spa',
-                'photography': '📸 Photography'
+                'surfing': '🏄 Surfing',
+                'surf': '🏄 Surfing'
             };
             
             activitiesData = [];
             Object.keys(activityKeywords).forEach(keyword => {
-                if (text.includes(keyword)) {
+                if (text.includes(keyword) && !activitiesData.includes(activityKeywords[keyword])) {
                     activitiesData.push(activityKeywords[keyword]);
                 }
             });
             
-            // Anzeige der erkannten Aktivitäten
             if (activitiesData.length > 0) {
                 document.getElementById('detectedActivities').style.display = 'block';
                 const chipsContainer = document.getElementById('activityChips');
@@ -760,126 +942,349 @@
                     `<div class="chip">${activity}</div>`
                 ).join('');
             } else {
-                alert('No specific activities detected. Try adding keywords like "beach", "temple", "hiking", etc.');
+                alert('No specific activities detected. Try keywords like "beach", "temple", "hiking", "skiing"');
             }
         }
 
-        // ========================================
-        // PACKLISTE GENERIEREN
-        // ========================================
         function generatePackingList() {
             packingListData = [];
+            const D = tripData.travelDays;
+            const temp = tripData.avgTemp;
             
-            // 1. BASICS (immer dabei)
             packingListData.push({
-                category: '✈️ Travel Essentials',
-                items: ['Passport', 'Travel insurance', 'Wallet', 'Phone charger', 'Toothbrush', 'Toothpaste']
+                category: '📄 Travel Documents & Finances',
+                items: [
+                    { name: 'Passport', qty: 1 },
+                    { name: 'Travel tickets', qty: 1 },
+                    { name: 'Credit cards', qty: 1 },
+                    { name: 'Cash', qty: 1 },
+                    { name: 'Insurance card', qty: 1 },
+                    { name: "Driver's license", qty: 1 },
+                    { name: 'Emergency contacts', qty: 1 },
+                    { name: 'Vaccination card', qty: 1 },
+                    { name: 'Physical copies of important documents', qty: 1 }
+                ]
             });
             
-            // 2. ELEKTRONIK (basiert auf Auswahl)
-            if (userData.electronics.length > 0) {
-                const electronicItems = [];
-                userData.electronics.forEach(device => {
-                    electronicItems.push(`${device.charAt(0).toUpperCase() + device.slice(1)} charger`);
-                });
-                packingListData.push({
-                    category: '🔌 Electronics',
-                    items: electronicItems
-                });
+            packingListData.push({
+                category: '🧴 Hygiene & Personal Care',
+                items: [
+                    { name: 'Toothbrush', qty: 1 },
+                    { name: 'Toothpaste', qty: 1 },
+                    { name: 'Deodorant', qty: 1 },
+                    { name: 'Shower gel', qty: 1 },
+                    { name: 'Shampoo', qty: 1 },
+                    { name: 'Hairbrush', qty: 1 },
+                    { name: 'Razor', qty: 1 },
+                    { name: 'Nail clipper', qty: 1 },
+                    { name: 'Face cream', qty: 1 },
+                    { name: 'Perfume', qty: 1 },
+                    { name: 'Hair styling product', qty: 1 },
+                    { name: 'Tweezers', qty: 1 },
+                    { name: 'Cotton swabs', qty: 1 },
+                    { name: 'Wet wipes', qty: 1 },
+                    { name: 'Tissues', qty: 1 },
+                    { name: 'Hand sanitizer', qty: 1 },
+                    { name: 'Lip balm', qty: 1 },
+                    { name: 'Travel towel', qty: 1 }
+                ]
+            });
+            
+            const clothingItems = [];
+            
+            clothingItems.push({ name: 'Underwear', qty: D + 1 });
+            clothingItems.push({ name: 'Socks', qty: D + 1 });
+            clothingItems.push({ name: 'Pants', qty: D });
+            clothingItems.push({ name: 'Pyjamas', qty: 1 });
+            clothingItems.push({ name: 'Shoes', qty: 1 });
+            clothingItems.push({ name: 'Belt', qty: 1 });
+            clothingItems.push({ name: 'Sunglasses', qty: 1 });
+            
+            let tshirts = 0, longsleeves = 0, sweaters = 0, outer = '';
+            
+            if (temp > 30) {
+                tshirts = D;
+                outer = '';
+            } else if (temp >= 20 && temp <= 30) {
+                tshirts = D;
+                clothingItems.push({ name: 'Shorts', qty: Math.ceil(D / 2) });
+                clothingItems.push({ name: 'Cap', qty: 1 });
+            } else if (temp >= 10 && temp < 20) {
+                tshirts = Math.ceil(D / 2);
+                longsleeves = Math.ceil(D / 2);
+                outer = 'Light jacket';
+            } else if (temp >= 0 && temp < 10) {
+                longsleeves = D;
+                sweaters = Math.ceil(D / 2);
+                outer = 'Warm jacket';
+                clothingItems.push({ name: 'Scarf', qty: 1 });
+                clothingItems.push({ name: 'Hat or beanie', qty: 1 });
+            } else {
+                longsleeves = D;
+                sweaters = D;
+                outer = 'Thermal winter jacket';
+                clothingItems.push({ name: 'Insulated gloves', qty: 1 });
+                clothingItems.push({ name: 'Wool hat', qty: 1 });
+                clothingItems.push({ name: 'Thermal underwear', qty: 2 });
+                clothingItems.push({ name: 'Winter boots', qty: 1 });
+                clothingItems.push({ name: 'Thick socks', qty: D });
             }
             
-            // 3. MEDIZINISCH (falls angegeben)
+            if (tshirts > 0) clothingItems.push({ name: 'T-shirts', qty: tshirts });
+            if (longsleeves > 0) clothingItems.push({ name: 'Long-sleeve shirts', qty: longsleeves });
+            if (sweaters > 0) clothingItems.push({ name: 'Sweaters', qty: sweaters });
+            if (outer) clothingItems.push({ name: outer, qty: 1 });
+            
+            const style = userData.styleProfile;
+            
+            if (style === 'feminine' && temp >= 10) {
+                const numDresses = Math.ceil((tshirts + longsleeves) * 0.2);
+                if (numDresses > 0) {
+                    clothingItems.push({ name: 'Dresses', qty: numDresses });
+                }
+                
+                const shortsQty = clothingItems.find(item => item.name === 'Shorts')?.qty || 0;
+                if (shortsQty > 0) {
+                    const numSkirts = Math.ceil(shortsQty * 0.4);
+                    clothingItems.push({ name: 'Skirts', qty: numSkirts });
+                }
+            }
+            
+            if (style === 'business' && temp > -10) {
+                const idx = clothingItems.findIndex(item => item.name === 'Long-sleeve shirts');
+                if (idx !== -1) {
+                    clothingItems[idx].name = userData.gender === 'man' ? 'Dress shirts' : 'Blouses';
+                }
+                
+                const jacketIdx = clothingItems.findIndex(item => item.name === 'Light jacket');
+                if (jacketIdx !== -1) {
+                    clothingItems[jacketIdx].name = 'Blazer';
+                }
+                
+                const pantsIdx = clothingItems.findIndex(item => item.name === 'Pants');
+                if (pantsIdx !== -1) {
+                    clothingItems[pantsIdx].name = 'Suit pants';
+                }
+            }
+            
+            if (userData.gender === 'woman') {
+                clothingItems.push({ name: 'Bras', qty: Math.ceil(D / 2) });
+                clothingItems.push({ name: 'Sports bra', qty: 1 });
+            }
+            
+            packingListData.push({
+                category: '👔 Clothing',
+                items: clothingItems
+            });
+            
+            const healthItems = [
+                { name: 'Personal first aid kit', qty: 1 },
+                { name: 'Bandages', qty: 1 },
+                { name: 'Painkillers', qty: 1 },
+                { name: 'Medication for diarrhea', qty: 1 },
+                { name: 'Medication for nausea', qty: 1 },
+                { name: 'Disinfectant spray', qty: 1 },
+                { name: 'Hand disinfectant', qty: 1 },
+                { name: 'Thermometer', qty: 1 },
+                { name: 'Insect repellent', qty: 1 },
+                { name: 'Sunscreen', qty: 1 }
+            ];
+            
             if (userData.medical) {
+                healthItems.unshift({ name: userData.medical, qty: 1 });
+            }
+            
+            packingListData.push({
+                category: '💊 Health & Safety',
+                items: healthItems
+            });
+            
+            const electronicsItems = [
+                { name: 'Smartphone', qty: 1 },
+                { name: 'Phone charger', qty: 1 },
+                { name: 'Power bank', qty: 1 },
+                { name: 'Travel adapter', qty: 1 },
+                { name: 'Headphones (optional)', qty: 1 },
+                { name: 'Laptop (optional)', qty: 1 },
+                { name: 'Laptop charger (optional)', qty: 1 },
+                { name: 'Tablet (optional)', qty: 1 },
+                { name: 'Tablet charger (optional)', qty: 1 },
+                { name: 'Camera (optional)', qty: 1 },
+                { name: 'Camera charger (optional)', qty: 1 },
+                { name: 'USB stick or SD card (optional)', qty: 1 },
+                { name: 'SIM card or eSIM', qty: 1 }
+            ];
+            
+            packingListData.push({
+                category: '🔌 Electronics & Technology',
+                items: electronicsItems
+            });
+            
+            packingListData.push({
+                category: '🎒 Practical & Miscellaneous',
+                items: [
+                    { name: 'Backpack', qty: 1 },
+                    { name: 'Suitcase', qty: 1 },
+                    { name: 'Laundry bag', qty: 2 },
+                    { name: 'Pen', qty: 1 },
+                    { name: 'Notebook', qty: 1 }
+                ]
+            });
+            
+            if (userData.gender === 'woman') {
                 packingListData.push({
-                    category: '💊 Medical',
-                    items: [userData.medical, 'Basic first aid kit']
+                    category: '💄 Women Essentials',
+                    items: [
+                        { name: 'Makeup', qty: 1 },
+                        { name: 'Makeup remover', qty: 1 },
+                        { name: 'Body lotion', qty: 1 },
+                        { name: 'Menstrual products', qty: 1 },
+                        { name: 'Hair ties', qty: 1 }
+                    ]
                 });
             }
             
-            // 4. WETTER-BASIERT
-            const weatherItems = getWeatherItems();
-            if (weatherItems.length > 0) {
+            if (userData.gender === 'man') {
                 packingListData.push({
-                    category: '🌤️ Weather Items',
-                    items: weatherItems
+                    category: '🧔 Men Essentials',
+                    items: [
+                        { name: 'Shaving foam', qty: 1 },
+                        { name: 'Aftershave', qty: 1 },
+                        { name: 'Watch', qty: 1 }
+                    ]
                 });
             }
             
-            // 5. AKTIVITÄTS-BASIERT
-            const activityItems = getActivityItems();
-            if (activityItems.length > 0) {
+            if (tripData.isRainy) {
                 packingListData.push({
-                    category: '🎯 Activity Gear',
-                    items: activityItems
+                    category: '☔ Rainy Weather',
+                    items: [
+                        { name: 'Waterproof jacket', qty: 1 },
+                        { name: 'Umbrella', qty: 1 }
+                    ]
                 });
             }
             
-            // Liste anzeigen
-            displayPackingList();
-        }
-
-        function getWeatherItems() {
-            const destination = tripData.destination;
-            const coldDestinations = ['Berlin', 'Copenhagen', 'Stockholm', 'Reykjavik', 'Vienna', 'Prague'];
-            const hotDestinations = ['Bangkok', 'Dubai', 'Bali', 'Singapore'];
-            const rainyDestinations = ['London', 'Amsterdam', 'Paris'];
-            
-            const items = [];
-            
-            if (coldDestinations.includes(destination)) {
-                items.push('Winter jacket', 'Warm scarf', 'Gloves', 'Thermal underwear');
+            if (tripData.isWindy) {
+                packingListData.push({
+                    category: '💨 Windy Weather',
+                    items: [
+                        { name: 'Windbreaker', qty: 1 }
+                    ]
+                });
             }
-            
-            if (hotDestinations.includes(destination)) {
-                items.push('Sunscreen SPF 50', 'Sunglasses', 'Light clothing', 'Hat');
-            }
-            
-            if (rainyDestinations.includes(destination)) {
-                items.push('Umbrella', 'Rain jacket', 'Waterproof shoes');
-            }
-            
-            return items;
-        }
-
-        function getActivityItems() {
-            const items = [];
             
             activitiesData.forEach(activity => {
                 if (activity.includes('Beach') || activity.includes('Swimming')) {
-                    items.push('Swimsuit', 'Beach towel', 'Flip-flops');
+                    packingListData.push({
+                        category: '🏖️ Beach Essentials',
+                        items: [
+                            { name: 'Swimsuit', qty: 1 },
+                            { name: 'Beach towel', qty: 1 },
+                            { name: 'Flip-flops', qty: 1 },
+                            { name: 'Beach bag', qty: 1 },
+                            { name: 'After sun lotion', qty: 1 }
+                        ]
+                    });
                 }
-                if (activity.includes('Temple') || activity.includes('Church')) {
-                    items.push('Long pants', 'Covered shoulders outfit', 'Scarf');
-                }
+                
                 if (activity.includes('Hiking')) {
-                    items.push('Hiking boots', 'Backpack', 'Water bottle');
+                    packingListData.push({
+                        category: '🥾 Hiking Gear',
+                        items: [
+                            { name: 'Hiking boots', qty: 1 },
+                            { name: 'Trekking socks', qty: 2 },
+                            { name: 'Functional shirt (quick-dry)', qty: 1 },
+                            { name: 'Hiking pants', qty: 1 },
+                            { name: 'Hiking backpack', qty: 1 },
+                            { name: 'Flashlight', qty: 1 }
+                        ]
+                    });
                 }
-                if (activity.includes('Rooftop') || activity.includes('Dinner')) {
-                    items.push('Smart-casual outfit', 'Nice shoes');
+                
+                if (activity.includes('Temple') || activity.includes('Church') || activity.includes('Mosque')) {
+                    packingListData.push({
+                        category: '🛕 Religious Site Visit',
+                        items: [
+                            { name: 'Long pants (covering knees)', qty: 1 },
+                            { name: 'Scarf (to cover shoulders/hair)', qty: 1 }
+                        ]
+                    });
                 }
-                if (activity.includes('Skiing')) {
-                    items.push('Ski jacket', 'Ski pants', 'Goggles');
+                
+                if (activity.includes('Fine Dining') || activity.includes('Night Out')) {
+                    packingListData.push({
+                        category: '🍽️ Evening Events',
+                        items: [
+                            { name: 'Elegant outfit', qty: 1 },
+                            { name: 'Dress shoes', qty: 1 }
+                        ]
+                    });
+                }
+                
+                if (activity.includes('City Sightseeing')) {
+                    packingListData.push({
+                        category: '🏙️ City Exploration',
+                        items: [
+                            { name: 'Comfortable walking shoes', qty: 1 },
+                            { name: 'City map / offline guide', qty: 1 }
+                        ]
+                    });
+                }
+                
+                if (activity.includes('Skiing') || activity.includes('Snowboarding')) {
+                    packingListData.push({
+                        category: '⛷️ Winter Sports',
+                        items: [
+                            { name: 'Ski jacket', qty: 1 },
+                            { name: 'Ski pants', qty: 1 },
+                            { name: 'Thermal base layer', qty: 2 },
+                            { name: 'Ski gloves', qty: 1 },
+                            { name: 'Ski goggles', qty: 1 },
+                            { name: 'Neck warmer / balaclava', qty: 1 },
+                            { name: 'Helmet', qty: 1 },
+                            { name: 'Ski socks', qty: 3 }
+                        ]
+                    });
+                }
+                
+                if (activity.includes('Business Meeting')) {
+                    packingListData.push({
+                        category: '💼 Business Essentials',
+                        items: [
+                            { name: 'Business suit', qty: 1 },
+                            { name: 'Dress shirt', qty: 2 },
+                            { name: 'Tie', qty: 1 },
+                            { name: 'Business shoes', qty: 1 },
+                            { name: 'Laptop (optional)', qty: 1 },
+                            { name: 'Notebook', qty: 1 },
+                            { name: 'Pens', qty: 1 },
+                            { name: 'Business cards', qty: 1 }
+                        ]
+                    });
                 }
             });
             
-            return [...new Set(items)]; // Duplikate entfernen
+            displayPackingList();
         }
 
         function displayPackingList() {
             const container = document.getElementById('packingList');
             container.innerHTML = '';
             
-            packingListData.forEach(category => {
+            packingListData.forEach((category, catIndex) => {
                 const categoryDiv = document.createElement('div');
                 categoryDiv.className = 'packing-category';
                 
                 let html = `<div class="category-title">${category.category}</div>`;
                 
-                category.items.forEach((item, index) => {
+                category.items.forEach((item, itemIndex) => {
+                    const qtyText = item.qty > 1 ? `×${item.qty}` : '';
                     html += `
-                        <div class="packing-item" id="item-${category.category}-${index}">
-                            <input type="checkbox" onchange="toggleItem('${category.category}', ${index})">
-                            <span>${item}</span>
+                        <div class="packing-item" id="item-${catIndex}-${itemIndex}">
+                            <input type="checkbox" onchange="toggleItem(${catIndex}, ${itemIndex})">
+                            <span>${item.name}</span>
+                            <span class="item-quantity">${qtyText}</span>
                         </div>
                     `;
                 });
@@ -889,8 +1294,8 @@
             });
         }
 
-        function toggleItem(category, index) {
-            const itemDiv = document.getElementById(`item-${category}-${index}`);
+        function toggleItem(catIndex, itemIndex) {
+            const itemDiv = document.getElementById(`item-${catIndex}-${itemIndex}`);
             itemDiv.classList.toggle('checked');
         }
 
@@ -899,14 +1304,13 @@
             const item = input.value.trim();
             
             if (item) {
-                // Zur "Custom Items" Kategorie hinzufügen
                 let customCategory = packingListData.find(c => c.category === '📝 Custom Items');
                 if (!customCategory) {
                     customCategory = { category: '📝 Custom Items', items: [] };
                     packingListData.push(customCategory);
                 }
                 
-                customCategory.items.push(item);
+                customCategory.items.push({ name: item, qty: 1 });
                 displayPackingList();
                 input.value = '';
             }
@@ -915,34 +1319,35 @@
         function downloadList() {
             let text = '🎒 YOUR TRAVELREADY PACKING LIST\n\n';
             text += `Destination: ${tripData.destination}\n`;
-            text += `Dates: ${tripData.startDate} to ${tripData.endDate}\n\n`;
+            text += `Dates: ${tripData.startDate} to ${tripData.endDate}\n`;
+            text += `Travel Days: ${tripData.travelDays}\n\n`;
             
             packingListData.forEach(category => {
                 text += `${category.category}\n`;
                 category.items.forEach(item => {
-                    text += `☐ ${item}\n`;
+                    const qtyText = item.qty > 1 ? ` (×${item.qty})` : '';
+                    text += `☐ ${item.name}${qtyText}\n`;
                 });
                 text += '\n';
             });
             
-            const blob = new Blob([text], { type: 'text/plain' });
+            const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
             a.download = 'TravelReady-PackingList.txt';
+            a.style.display = 'none';
+            document.body.appendChild(a);
             a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
         }
 
-        // ========================================
-        // INITIALISIERUNG
-        // ========================================
         window.onload = function() {
-            // Mindestdatum für Reise = heute
             const today = new Date().toISOString().split('T')[0];
             document.getElementById('startDate').min = today;
             document.getElementById('endDate').min = today;
             
-            // End-Datum aktualisieren wenn Start-Datum geändert wird
             document.getElementById('startDate').addEventListener('change', function() {
                 document.getElementById('endDate').min = this.value;
             });
