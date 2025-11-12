@@ -1,1 +1,952 @@
-print("hello")
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TravelReady - Your Smart Packing Assistant</title>
+    <style>
+        /* ========================================
+           GRUNDLEGENDES STYLING
+           Das ist wie die "Basis-Farbe" für alles
+        ======================================== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Nunito', 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #333;
+        }
+
+        /* ========================================
+           CONTAINER - Die "Box" die alles enthält
+        ======================================== */
+        .app-container {
+            background: white;
+            width: 90%;
+            max-width: 800px;
+            min-height: 600px;
+            border-radius: 30px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* ========================================
+           HEADER - Der obere Teil mit Logo
+        ======================================== */
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 2rem;
+            text-align: center;
+            color: white;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        /* ========================================
+           PROGRESS BAR - Zeigt wo man gerade ist
+        ======================================== */
+        .progress-container {
+            background: #f0f0f0;
+            padding: 1.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .progress-step {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+            color: #999;
+            transition: all 0.3s ease;
+        }
+
+        .progress-step.active {
+            color: #667eea;
+            font-weight: bold;
+        }
+
+        .progress-step.completed {
+            color: #10b981;
+        }
+
+        .step-circle {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            background: #e0e0e0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .progress-step.active .step-circle {
+            background: #667eea;
+            color: white;
+            transform: scale(1.1);
+        }
+
+        .progress-step.completed .step-circle {
+            background: #10b981;
+            color: white;
+        }
+
+        /* ========================================
+           SEITEN - Jede "Page" ist eine Ansicht
+        ======================================== */
+        .page {
+            display: none;
+            padding: 3rem 2rem;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .page-title {
+            font-size: 2rem;
+            color: #667eea;
+            margin-bottom: 0.5rem;
+        }
+
+        .page-subtitle {
+            color: #666;
+            margin-bottom: 2rem;
+        }
+
+        /* ========================================
+           FORM ELEMENTE - Eingabefelder & Buttons
+        ======================================== */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        /* ========================================
+           CHECKBOX GRID - Für mehrere Optionen
+        ======================================== */
+        .checkbox-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.8rem;
+            background: #f8f9fa;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .checkbox-item:hover {
+            background: #e9ecef;
+            transform: translateY(-2px);
+        }
+
+        .checkbox-item input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+        /* ========================================
+           BUTTONS - Vor/Zurück Navigation
+        ======================================== */
+        .button-container {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 15px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: #e0e0e0;
+            color: #333;
+        }
+
+        .btn-secondary:hover {
+            background: #d0d0d0;
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* ========================================
+           CHIPS - Für erkannte Aktivitäten
+        ======================================== */
+        .chips-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .chip {
+            padding: 0.5rem 1rem;
+            background: #667eea;
+            color: white;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .chip-remove {
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        /* ========================================
+           PACKING LIST - Die finale Checkliste
+        ======================================== */
+        .packing-category {
+            margin-bottom: 2rem;
+        }
+
+        .category-title {
+            font-size: 1.3rem;
+            color: #667eea;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .packing-item {
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 10px;
+            margin-bottom: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .packing-item:hover {
+            background: #e9ecef;
+        }
+
+        .packing-item input[type="checkbox"] {
+            width: 24px;
+            height: 24px;
+            margin-right: 1rem;
+            cursor: pointer;
+        }
+
+        .packing-item.checked {
+            opacity: 0.6;
+            text-decoration: line-through;
+        }
+
+        /* ========================================
+           RESPONSIVE - Für Handy & Tablet
+        ======================================== */
+        @media (max-width: 768px) {
+            .app-container {
+                width: 95%;
+                border-radius: 20px;
+            }
+
+            .header h1 {
+                font-size: 1.8rem;
+            }
+
+            .progress-container {
+                flex-wrap: wrap;
+                gap: 1rem;
+            }
+
+            .page {
+                padding: 2rem 1.5rem;
+            }
+
+            .checkbox-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- ========================================
+             HEADER - Zeigt den Titel der App
+        ======================================== -->
+        <div class="header">
+            <h1>✈️ TravelReady</h1>
+            <p>Your Smart Packing Assistant</p>
+        </div>
+
+        <!-- ========================================
+             PROGRESS BAR - Zeigt Fortschritt
+        ======================================== -->
+        <div class="progress-container">
+            <div class="progress-step active" data-step="1">
+                <div class="step-circle">1</div>
+                <span>Profile</span>
+            </div>
+            <div class="progress-step" data-step="2">
+                <div class="step-circle">2</div>
+                <span>Trip</span>
+            </div>
+            <div class="progress-step" data-step="3">
+                <div class="step-circle">3</div>
+                <span>Activities</span>
+            </div>
+            <div class="progress-step" data-step="4">
+                <div class="step-circle">4</div>
+                <span>Pack</span>
+            </div>
+        </div>
+
+        <!-- ========================================
+             PAGE 1 - PERSÖNLICHE INFORMATIONEN
+        ======================================== -->
+        <div class="page active" id="page1">
+            <h2 class="page-title">👤 Tell us about yourself</h2>
+            <p class="page-subtitle">This helps us personalize your packing list</p>
+
+            <div class="form-group">
+                <label>Gender (optional)</label>
+                <select id="gender">
+                    <option value="">Prefer not to say</option>
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                    <option value="other">Other</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Age group</label>
+                <select id="age" required>
+                    <option value="">Select your age range</option>
+                    <option value="18-25">18-25</option>
+                    <option value="26-35">26-35</option>
+                    <option value="36-45">36-45</option>
+                    <option value="46-55">46-55</option>
+                    <option value="56+">56+</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Medical needs (optional)</label>
+                <input type="text" id="medical" placeholder="e.g., lactose-free, ADHD medication, insulin">
+            </div>
+
+            <div class="form-group">
+                <label>Electronics you'll bring</label>
+                <div class="checkbox-grid">
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="phone" value="phone" checked disabled>
+                        <label for="phone">📱 Phone (always)</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="laptop" value="laptop">
+                        <label for="laptop">💻 Laptop</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="tablet" value="tablet">
+                        <label for="tablet">📱 Tablet</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="camera" value="camera">
+                        <label for="camera">📷 Camera</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="headphones" value="headphones">
+                        <label for="headphones">🎧 Headphones</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="smartwatch" value="smartwatch">
+                        <label for="smartwatch">⌚ Smartwatch</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="button-container">
+                <button class="btn btn-primary" onclick="nextPage()">Next: Trip Details →</button>
+            </div>
+        </div>
+
+        <!-- ========================================
+             PAGE 2 - REISEDETAILS
+        ======================================== -->
+        <div class="page" id="page2">
+            <h2 class="page-title">🌍 Where are you going?</h2>
+            <p class="page-subtitle">We'll check the weather for you</p>
+
+            <div class="form-group">
+                <label>Destination</label>
+                <select id="destination" required>
+                    <option value="">Choose your destination</option>
+                    <option value="Bangkok">🇹🇭 Bangkok</option>
+                    <option value="Tokyo">🇯🇵 Tokyo</option>
+                    <option value="Bali">🇮🇩 Bali</option>
+                    <option value="Paris">🇫🇷 Paris</option>
+                    <option value="Lisbon">🇵🇹 Lisbon</option>
+                    <option value="Barcelona">🇪🇸 Barcelona</option>
+                    <option value="Dubai">🇦🇪 Dubai</option>
+                    <option value="New York">🇺🇸 New York</option>
+                    <option value="London">🇬🇧 London</option>
+                    <option value="Rome">🇮🇹 Rome</option>
+                    <option value="Istanbul">🇹🇷 Istanbul</option>
+                    <option value="Singapore">🇸🇬 Singapore</option>
+                    <option value="Sydney">🇦🇺 Sydney</option>
+                    <option value="Amsterdam">🇳🇱 Amsterdam</option>
+                    <option value="Prague">🇨🇿 Prague</option>
+                    <option value="Vienna">🇦🇹 Vienna</option>
+                    <option value="Berlin">🇩🇪 Berlin</option>
+                    <option value="Copenhagen">🇩🇰 Copenhagen</option>
+                    <option value="Stockholm">🇸🇪 Stockholm</option>
+                    <option value="Reykjavik">🇮🇸 Reykjavik</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Start date</label>
+                <input type="date" id="startDate" required>
+            </div>
+
+            <div class="form-group">
+                <label>End date</label>
+                <input type="date" id="endDate" required>
+            </div>
+
+            <div id="weatherInfo" style="display: none; padding: 1rem; background: #e3f2fd; border-radius: 10px; margin-top: 1rem;">
+                <strong>Weather info:</strong>
+                <p id="weatherText"></p>
+            </div>
+
+            <div class="button-container">
+                <button class="btn btn-secondary" onclick="prevPage()">← Back</button>
+                <button class="btn btn-primary" onclick="nextPage()">Next: Activities →</button>
+            </div>
+        </div>
+
+        <!-- ========================================
+             PAGE 3 - AKTIVITÄTEN (KI)
+        ======================================== -->
+        <div class="page" id="page3">
+            <h2 class="page-title">🎯 What will you do there?</h2>
+            <p class="page-subtitle">Describe your plans, and our AI will help</p>
+
+            <div class="form-group">
+                <label>Type your activities</label>
+                <textarea id="activities" rows="5" placeholder="e.g., I'll go to a rooftop dinner, then to the beach, and visit a temple..."></textarea>
+            </div>
+
+            <button class="btn btn-primary" onclick="analyzeActivities()" style="width: 100%; margin-bottom: 1rem;">
+                🤖 Analyze with AI
+            </button>
+
+            <div id="detectedActivities" style="display: none;">
+                <p style="font-weight: 600; margin-bottom: 0.5rem;">Detected activities:</p>
+                <div class="chips-container" id="activityChips"></div>
+            </div>
+
+            <div style="margin-top: 2rem; padding: 1rem; background: #f8f9fa; border-radius: 10px;">
+                <p style="font-weight: 600; margin-bottom: 0.5rem;">💡 Popular in <span id="popularDestination"></span>:</p>
+                <div id="popularActivities" style="color: #666;"></div>
+            </div>
+
+            <div class="button-container">
+                <button class="btn btn-secondary" onclick="prevPage()">← Back</button>
+                <button class="btn btn-primary" onclick="nextPage()">Next: Packing List →</button>
+            </div>
+        </div>
+
+        <!-- ========================================
+             PAGE 4 - PACKLISTE
+        ======================================== -->
+        <div class="page" id="page4">
+            <h2 class="page-title">🎒 Your Personalized Packing List</h2>
+            <p class="page-subtitle">Check off items as you pack them</p>
+
+            <div id="packingList">
+                <!-- Wird mit JavaScript gefüllt -->
+            </div>
+
+            <div class="form-group" style="margin-top: 2rem;">
+                <label>📝 Anything missing?</label>
+                <input type="text" id="missingItem" placeholder="Add custom items...">
+                <button class="btn btn-secondary" onclick="addCustomItem()" style="margin-top: 0.5rem; width: 100%;">
+                    + Add to List
+                </button>
+            </div>
+
+            <div class="button-container">
+                <button class="btn btn-secondary" onclick="prevPage()">← Back</button>
+                <button class="btn btn-primary" onclick="downloadList()">📥 Download List</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================
+         JAVASCRIPT - Die "Intelligenz" der App
+    ======================================== -->
+    <script>
+        // GLOBALE VARIABLEN - Speichert alle Daten
+        let currentPage = 1;
+        let userData = {};
+        let tripData = {};
+        let activitiesData = [];
+        let packingListData = [];
+
+        // ========================================
+        // NAVIGATION - Zwischen Seiten wechseln
+        // ========================================
+        function nextPage() {
+            if (currentPage === 1) {
+                // Daten von Seite 1 speichern
+                userData = {
+                    gender: document.getElementById('gender').value,
+                    age: document.getElementById('age').value,
+                    medical: document.getElementById('medical').value,
+                    electronics: getSelectedElectronics()
+                };
+                
+                if (!userData.age) {
+                    alert('Please select your age group');
+                    return;
+                }
+            }
+            
+            if (currentPage === 2) {
+                // Daten von Seite 2 speichern
+                tripData = {
+                    destination: document.getElementById('destination').value,
+                    startDate: document.getElementById('startDate').value,
+                    endDate: document.getElementById('endDate').value
+                };
+                
+                if (!tripData.destination || !tripData.startDate || !tripData.endDate) {
+                    alert('Please fill in all trip details');
+                    return;
+                }
+                
+                // Wetter abrufen
+                fetchWeather();
+                
+                // Beliebte Aktivitäten anzeigen
+                document.getElementById('popularDestination').textContent = tripData.destination;
+                showPopularActivities(tripData.destination);
+            }
+            
+            if (currentPage === 3) {
+                // Packliste generieren
+                generatePackingList();
+            }
+            
+            // Zur nächsten Seite
+            if (currentPage < 4) {
+                document.getElementById('page' + currentPage).classList.remove('active');
+                currentPage++;
+                document.getElementById('page' + currentPage).classList.add('active');
+                updateProgressBar();
+            }
+        }
+
+        function prevPage() {
+            if (currentPage > 1) {
+                document.getElementById('page' + currentPage).classList.remove('active');
+                currentPage--;
+                document.getElementById('page' + currentPage).classList.add('active');
+                updateProgressBar();
+            }
+        }
+
+        function updateProgressBar() {
+            document.querySelectorAll('.progress-step').forEach((step, index) => {
+                const stepNumber = index + 1;
+                if (stepNumber < currentPage) {
+                    step.classList.add('completed');
+                    step.classList.remove('active');
+                } else if (stepNumber === currentPage) {
+                    step.classList.add('active');
+                    step.classList.remove('completed');
+                } else {
+                    step.classList.remove('active', 'completed');
+                }
+            });
+        }
+
+        // ========================================
+        // HILFSFUNKTIONEN
+        // ========================================
+        function getSelectedElectronics() {
+            const electronics = [];
+            document.querySelectorAll('.checkbox-item input[type="checkbox"]:checked').forEach(checkbox => {
+                electronics.push(checkbox.value);
+            });
+            return electronics;
+        }
+
+        // ========================================
+        // WETTER API (Vereinfacht für Demo)
+        // ========================================
+        function fetchWeather() {
+            const destination = tripData.destination;
+            const weatherInfo = document.getElementById('weatherInfo');
+            const weatherText = document.getElementById('weatherText');
+            
+            // Für Demo: Statische Wetterdaten
+            const weatherData = {
+                'Bangkok': '🌡️ 30°C, humid, afternoon rain likely',
+                'Tokyo': '🌸 18°C, mild and pleasant',
+                'Bali': '☀️ 28°C, tropical and sunny',
+                'Paris': '🌦️ 15°C, mild with occasional rain',
+                'Lisbon': '☀️ 22°C, warm and sunny',
+                'Barcelona': '☀️ 24°C, warm Mediterranean climate',
+                'Dubai': '🔥 35°C, hot and dry',
+                'New York': '🍂 12°C, cool autumn weather',
+                'London': '🌧️ 10°C, rainy and cool',
+                'Rome': '☀️ 20°C, pleasant Mediterranean',
+                'Istanbul': '🌤️ 16°C, mild and partly cloudy',
+                'Singapore': '🌴 29°C, hot and humid year-round',
+                'Sydney': '☀️ 25°C, warm and sunny',
+                'Amsterdam': '🌧️ 8°C, cool and rainy',
+                'Prague': '❄️ 5°C, cold and crisp',
+                'Vienna': '🌨️ 3°C, cold with possible snow',
+                'Berlin': '🌨️ 2°C, cold winter weather',
+                'Copenhagen': '❄️ 1°C, very cold',
+                'Stockholm': '❄️ -2°C, freezing and snowy',
+                'Reykjavik': '❄️ 0°C, cold with strong winds'
+            };
+            
+            weatherText.textContent = weatherData[destination] || '☁️ Weather data not available';
+            weatherInfo.style.display = 'block';
+        }
+
+        // ========================================
+        // BELIEBTE AKTIVITÄTEN
+        // ========================================
+        function showPopularActivities(destination) {
+            const popularActivitiesData = {
+                'Bangkok': ['Temple visits', 'Street food tours', 'Rooftop bars', 'Floating markets', 'Thai massage'],
+                'Tokyo': ['Sushi restaurants', 'Cherry blossom viewing', 'Shopping in Shibuya', 'Mount Fuji trip', 'Karaoke'],
+                'Bali': ['Beach days', 'Temple visits', 'Rice terrace tours', 'Surfing', 'Yoga retreats'],
+                'Paris': ['Eiffel Tower', 'Louvre Museum', 'Seine river cruise', 'Wine tasting', 'Cafe hopping'],
+                'Lisbon': ['Tram rides', 'Pastéis de nata tasting', 'Fado music', 'Beach trips', 'Historic neighborhoods']
+            };
+            
+            const activities = popularActivitiesData[destination] || ['City tours', 'Local cuisine', 'Museums', 'Shopping'];
+            document.getElementById('popularActivities').innerHTML = activities.map(a => `• ${a}`).join('<br>');
+        }
+
+        // ========================================
+        // KI AKTIVITÄTS-ERKENNUNG (Vereinfacht)
+        // ========================================
+        function analyzeActivities() {
+            const text = document.getElementById('activities').value.toLowerCase();
+            
+            // Einfache Keyword-Erkennung (später: echte KI)
+            const activityKeywords = {
+                'beach': '🏖️ Beach',
+                'swimming': '🏊 Swimming',
+                'temple': '🛕 Temple visit',
+                'church': '⛪ Church visit',
+                'museum': '🏛️ Museum',
+                'hiking': '🥾 Hiking',
+                'restaurant': '🍽️ Dining',
+                'dinner': '🍽️ Dinner',
+                'rooftop': '🌆 Rooftop bar',
+                'bar': '🍹 Bar',
+                'club': '💃 Nightclub',
+                'shopping': '🛍️ Shopping',
+                'skiing': '⛷️ Skiing',
+                'surfing': '🏄 Surfing',
+                'yoga': '🧘 Yoga',
+                'spa': '💆 Spa',
+                'photography': '📸 Photography'
+            };
+            
+            activitiesData = [];
+            Object.keys(activityKeywords).forEach(keyword => {
+                if (text.includes(keyword)) {
+                    activitiesData.push(activityKeywords[keyword]);
+                }
+            });
+            
+            // Anzeige der erkannten Aktivitäten
+            if (activitiesData.length > 0) {
+                document.getElementById('detectedActivities').style.display = 'block';
+                const chipsContainer = document.getElementById('activityChips');
+                chipsContainer.innerHTML = activitiesData.map(activity => 
+                    `<div class="chip">${activity}</div>`
+                ).join('');
+            } else {
+                alert('No specific activities detected. Try adding keywords like "beach", "temple", "hiking", etc.');
+            }
+        }
+
+        // ========================================
+        // PACKLISTE GENERIEREN
+        // ========================================
+        function generatePackingList() {
+            packingListData = [];
+            
+            // 1. BASICS (immer dabei)
+            packingListData.push({
+                category: '✈️ Travel Essentials',
+                items: ['Passport', 'Travel insurance', 'Wallet', 'Phone charger', 'Toothbrush', 'Toothpaste']
+            });
+            
+            // 2. ELEKTRONIK (basiert auf Auswahl)
+            if (userData.electronics.length > 0) {
+                const electronicItems = [];
+                userData.electronics.forEach(device => {
+                    electronicItems.push(`${device.charAt(0).toUpperCase() + device.slice(1)} charger`);
+                });
+                packingListData.push({
+                    category: '🔌 Electronics',
+                    items: electronicItems
+                });
+            }
+            
+            // 3. MEDIZINISCH (falls angegeben)
+            if (userData.medical) {
+                packingListData.push({
+                    category: '💊 Medical',
+                    items: [userData.medical, 'Basic first aid kit']
+                });
+            }
+            
+            // 4. WETTER-BASIERT
+            const weatherItems = getWeatherItems();
+            if (weatherItems.length > 0) {
+                packingListData.push({
+                    category: '🌤️ Weather Items',
+                    items: weatherItems
+                });
+            }
+            
+            // 5. AKTIVITÄTS-BASIERT
+            const activityItems = getActivityItems();
+            if (activityItems.length > 0) {
+                packingListData.push({
+                    category: '🎯 Activity Gear',
+                    items: activityItems
+                });
+            }
+            
+            // Liste anzeigen
+            displayPackingList();
+        }
+
+        function getWeatherItems() {
+            const destination = tripData.destination;
+            const coldDestinations = ['Berlin', 'Copenhagen', 'Stockholm', 'Reykjavik', 'Vienna', 'Prague'];
+            const hotDestinations = ['Bangkok', 'Dubai', 'Bali', 'Singapore'];
+            const rainyDestinations = ['London', 'Amsterdam', 'Paris'];
+            
+            const items = [];
+            
+            if (coldDestinations.includes(destination)) {
+                items.push('Winter jacket', 'Warm scarf', 'Gloves', 'Thermal underwear');
+            }
+            
+            if (hotDestinations.includes(destination)) {
+                items.push('Sunscreen SPF 50', 'Sunglasses', 'Light clothing', 'Hat');
+            }
+            
+            if (rainyDestinations.includes(destination)) {
+                items.push('Umbrella', 'Rain jacket', 'Waterproof shoes');
+            }
+            
+            return items;
+        }
+
+        function getActivityItems() {
+            const items = [];
+            
+            activitiesData.forEach(activity => {
+                if (activity.includes('Beach') || activity.includes('Swimming')) {
+                    items.push('Swimsuit', 'Beach towel', 'Flip-flops');
+                }
+                if (activity.includes('Temple') || activity.includes('Church')) {
+                    items.push('Long pants', 'Covered shoulders outfit', 'Scarf');
+                }
+                if (activity.includes('Hiking')) {
+                    items.push('Hiking boots', 'Backpack', 'Water bottle');
+                }
+                if (activity.includes('Rooftop') || activity.includes('Dinner')) {
+                    items.push('Smart-casual outfit', 'Nice shoes');
+                }
+                if (activity.includes('Skiing')) {
+                    items.push('Ski jacket', 'Ski pants', 'Goggles');
+                }
+            });
+            
+            return [...new Set(items)]; // Duplikate entfernen
+        }
+
+        function displayPackingList() {
+            const container = document.getElementById('packingList');
+            container.innerHTML = '';
+            
+            packingListData.forEach(category => {
+                const categoryDiv = document.createElement('div');
+                categoryDiv.className = 'packing-category';
+                
+                let html = `<div class="category-title">${category.category}</div>`;
+                
+                category.items.forEach((item, index) => {
+                    html += `
+                        <div class="packing-item" id="item-${category.category}-${index}">
+                            <input type="checkbox" onchange="toggleItem('${category.category}', ${index})">
+                            <span>${item}</span>
+                        </div>
+                    `;
+                });
+                
+                categoryDiv.innerHTML = html;
+                container.appendChild(categoryDiv);
+            });
+        }
+
+        function toggleItem(category, index) {
+            const itemDiv = document.getElementById(`item-${category}-${index}`);
+            itemDiv.classList.toggle('checked');
+        }
+
+        function addCustomItem() {
+            const input = document.getElementById('missingItem');
+            const item = input.value.trim();
+            
+            if (item) {
+                // Zur "Custom Items" Kategorie hinzufügen
+                let customCategory = packingListData.find(c => c.category === '📝 Custom Items');
+                if (!customCategory) {
+                    customCategory = { category: '📝 Custom Items', items: [] };
+                    packingListData.push(customCategory);
+                }
+                
+                customCategory.items.push(item);
+                displayPackingList();
+                input.value = '';
+            }
+        }
+
+        function downloadList() {
+            let text = '🎒 YOUR TRAVELREADY PACKING LIST\n\n';
+            text += `Destination: ${tripData.destination}\n`;
+            text += `Dates: ${tripData.startDate} to ${tripData.endDate}\n\n`;
+            
+            packingListData.forEach(category => {
+                text += `${category.category}\n`;
+                category.items.forEach(item => {
+                    text += `☐ ${item}\n`;
+                });
+                text += '\n';
+            });
+            
+            const blob = new Blob([text], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'TravelReady-PackingList.txt';
+            a.click();
+        }
+
+        // ========================================
+        // INITIALISIERUNG
+        // ========================================
+        window.onload = function() {
+            // Mindestdatum für Reise = heute
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('startDate').min = today;
+            document.getElementById('endDate').min = today;
+            
+            // End-Datum aktualisieren wenn Start-Datum geändert wird
+            document.getElementById('startDate').addEventListener('change', function() {
+                document.getElementById('endDate').min = this.value;
+            });
+        };
+    </script>
+</body>
+</html>
